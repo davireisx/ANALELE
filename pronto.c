@@ -62,8 +62,10 @@ SPI_HandleTypeDef hspi1;
 int direcao;
 int ColetavelX;
 int ColetavelY;
-int score = 0;
-int scoremax;
+int dezena = 0;
+int unidade = 0;
+int dezenamax;
+int unidademax;
 int controle = 0;
 int velo = 100;
 int botao;
@@ -285,10 +287,13 @@ void Menu(void)
     {
 	int escolha=0;
     	ST7789_Fill_Color(GREEN);
-    	ST7789_WriteString(50, 10, "SNAKE.IO", Font_16x26 , WHITE, GREEN);
+    	ST7789_WriteString(50, 20, "SNAKE.IO", Font_16x26 , WHITE, GREEN);
     	ST7789_WriteString(40, 80, "PA9 - PLAY", Font_11x18, WHITE, GREEN);
     	ST7789_WriteString(40, 120, "PA10 - SPEED", Font_11x18, WHITE, GREEN);
     	ST7789_WriteString(40, 160, "PA11 - CONTROLS", Font_11x18, WHITE, GREEN);
+    	 ST7789_WriteString(30, 200, "RECORDE: ", Font_16x26 , WHITE, GREEN);
+    	 ST7789_WriteChar(170, 200, dezenamax + '0', Font_16x26 , WHITE, GREEN);
+    	 ST7789_WriteChar(187, 200, unidademax + '0', Font_16x26 , WHITE, GREEN);
     	HAL_Delay(2000);
 
     	while(escolha==0)
@@ -338,11 +343,11 @@ void IniciarJogo (void) {
 
 	bola4x = 55;
 	bola4y = 150;
+	dezena = 0;
+	unidade = 0;
 	ColetavelX = (rand() % 166) + 34;
     ColetavelY = (rand() % 150) + 80;
 	 ST7789_Fill_Color(RED);
-	 ST7789_WriteString(50, 25, "SCORE = ", Font_16x26 , WHITE, RED);
-	 ST7789_WriteChar(170, 25, score + '0', Font_16x26 , WHITE, RED);
 	 ST7789_DrawFilledRectangle(34, 80, 170, 150, BLACK	);
 	 desenharbola1();
 	 desenharbola2();
@@ -358,50 +363,29 @@ void IniciarJogo (void) {
 void movimento(void){
 
 	while(jogar == 0){
-		ST7789_WriteChar(170, 25, score + '0', Font_16x26 , WHITE, RED);
+
+		 ST7789_WriteString(50, 25, "SCORE: ", Font_16x26 , WHITE, RED);
+		 ST7789_WriteChar(170, 25, dezena + '0', Font_16x26 , WHITE, RED);
+		 ST7789_WriteChar(187, 25, unidade + '0', Font_16x26 , WHITE, RED);
 
 		if(BOTAO11 == 0){
-			direcao = 1;
+			bola1Finx = bola1Inix + 10;
+			apagarbola();
+			bola4x = bola3x;
+			bola4y = bola3y;
+			desenharbola4();
+			bola3x = bola2x;
+			bola3y = bola2y;
+			desenharbola3();
+			bola2x = bola1Inix;
+			bola2y = bola1Iniy;
+			desenharbola2();
+			bola1Inix = bola1Finx;
+			bola1Iniy = bola1Finy;
+			desenharbola1();
+
 	  }
-		
 		else if(BOTAO12 == 0){
-			direcao = 2;
-		 }
-
-		else if(BOTAO9 == 0){
-			direcao = 3;
-			}
-
-		else if(BOTAO10 == 0){
-			direcao = 4;
-		}
-		
-		apagarcoletavel();
-		colisao();
-
-	switch (direcao){
-	case 1 : 
-		while (1)
-	{
-		bola1Finx = bola1Inix + 10;
-        apagarbola();
-		bola4x = bola3x;
-		bola4y = bola3y;
-	    desenharbola4();
-		bola3x = bola2x;
-		bola3y = bola2y;
-		desenharbola3();
-		bola2x = bola1Inix;
-		bola2y = bola1Iniy;
-		desenharbola2();
-		bola1Inix = bola1Finx;
-		bola1Iniy = bola1Finy;
-	    desenharbola1();
-	}
-		
-	case 2: 
-		while (1)
-		{
 			bola1Finy = bola1Iniy - 10;
 			apagarbola();
 			bola4x = bola3x;
@@ -415,46 +399,63 @@ void movimento(void){
 			desenharbola2();
 			bola1Inix = bola1Finx;
 			bola1Iniy = bola1Finy;
-		    desenharbola1();
-		}
-		
-	case 3: while (1)
-	    {
-		bola1Finx = bola1Inix - 10;
-		bola1Finx = bola1Inix - 10;
-		apagarbola();
-		bola4x = bola3x;
-		bola4y = bola3y;
-		desenharbola4();
-		bola3x = bola2x;
-		bola3y = bola2y;
-		desenharbola3();
-		bola2x = bola1Inix;
-		bola2y = bola1Iniy;
-		desenharbola2();
-	    bola1Inix = bola1Finx;
-		bola1Iniy = bola1Finy;
-		desenharbola1();
-	    }
-	
-	case 4:  while (1)
-        {
-		bola1Finy = bola1Iniy + 10;
-		apagarbola();
-		bola4x = bola3x;
-		bola4y = bola3y;
-		desenharbola4();
-		bola3x = bola2x;
-		bola3y = bola2y;
-		desenharbola3();
-		bola2x = bola1Inix;
-		bola2y = bola1Iniy;
-		desenharbola2();
-		bola1Inix = bola1Finx;
-		bola1Iniy = bola1Finy;
-		desenharbola1();
-        }
+			desenharbola1();
+
 	}
+
+		else if(BOTAO9 == 0){
+			bola1Finx = bola1Inix - 10;
+		    apagarbola();
+			bola4x = bola3x;
+			bola4y = bola3y;
+			desenharbola4();
+			bola3x = bola2x;
+			bola3y = bola2y;
+			desenharbola3();
+			bola2x = bola1Inix;
+			bola2y = bola1Iniy;
+			desenharbola2();
+			bola1Inix = bola1Finx;
+			bola1Iniy = bola1Finy;
+			desenharbola1();
+
+			}
+
+		else if(BOTAO10 == 0){
+			bola1Finy = bola1Iniy + 10;
+			apagarbola();
+			bola4x = bola3x;
+			bola4y = bola3y;
+			desenharbola4();
+			bola3x = bola2x;
+			bola3y = bola2y;
+			desenharbola3();
+			bola2x = bola1Inix;
+			bola2y = bola1Iniy;
+			desenharbola2();
+		    bola1Inix = bola1Finx;
+			bola1Iniy = bola1Finy;
+			desenharbola1();
+
+		}
+		colisao();
+		apagarcoletavel();
+
+		if (dezena > 9 && unidade > 9) {
+			ST7789_Fill_Color(MAGENTA);
+			ST7789_WriteString(50, 30, "PARABENS!", Font_16x26, WHITE, MAGENTA);
+			ST7789_WriteString(50, 100, "VOCE GANHOU!", Font_11x18, WHITE, MAGENTA);
+			ST7789_WriteString(50, 130, "SCORE: 100", Font_11x18, WHITE, MAGENTA);
+			 ST7789_WriteString(60, 190, "PA12 - MENU", Font_11x18 , WHITE, MAGENTA);
+
+			while(1){
+
+				 	 		if (BOTAO12 == 0) {
+				 	 			break;
+				 	 		}
+				 	 }
+			break;
+		}
 	}
 	return;
 }
@@ -464,7 +465,9 @@ void colisao(void){
      if(bola1Inix < 41 || bola1Inix > 200 || bola1Iniy < 81 || bola1Iniy > 227){
 	 ST7789_Fill_Color(RED);
 	 ST7789_WriteString(50, 30, "YOU LOSE!", Font_16x26 , WHITE, RED);
-	 ST7789_WriteString(60, 100, "SCORE: 0", Font_11x18 , WHITE, RED);
+	 ST7789_WriteString(60, 100, "SCORE:", Font_11x18 , WHITE, RED);
+	 ST7789_WriteChar(125, 100, dezena + '0', Font_11x18 , WHITE, RED);
+	 ST7789_WriteChar(135, 100, unidade + '0', Font_11x18 , WHITE, RED);
 	 ST7789_WriteString(60, 190, "PA12 - MENU", Font_11x18 , WHITE, RED);
 
 	 while(1){
@@ -516,9 +519,30 @@ void coletavel(void) {
 void apagarcoletavel(void) {
 	if(ColetavelX - 8 <= bola1Inix && bola1Inix <= ColetavelX + 8 && ColetavelY - 8 <= bola1Iniy && bola1Iniy <= ColetavelY + 8 ) {
 	ST7789_DrawFilledCircle(ColetavelX,ColetavelY, 5, BLACK);
+	LED3_LIGA;
+	LED4_LIGA;
+	LED5_LIGA;
+	LED6_LIGA;
+	HAL_Delay(500);
+	LED3_DESLIGA;
+	LED4_DESLIGA;
+	LED5_DESLIGA;
+	LED6_DESLIGA;
+
 	coletavel();
 	HAL_Delay(100);
-	score += 1;
+	unidade += 1;
+	if(unidade > 9){
+		dezena +=1;
+		unidade = 0;
+	}
+
+	if (dezena >= dezenamax) {
+		if (unidade >= unidademax) {
+			dezenamax = dezena;
+			unidademax = unidade;
+		}
+	}
 	}
 }
 
@@ -559,6 +583,9 @@ void VelocidadeLed(void) {
 	LED3_DESLIGA;
 	LED4_DESLIGA;
     LED5_DESLIGA;
+    LED6_LIGA;
+    HAL_Delay(500);
+    LED6_DESLIGA;
     return;
 }
 
