@@ -287,7 +287,7 @@ void Menu(void)
     {
 	int escolha=0;
     	ST7789_Fill_Color(GREEN);
-    	ST7789_WriteString(50, 20, "SNAKE.IO", Font_16x26 , WHITE, GREEN);
+    	ST7789_WriteString(50, 20, "SNACOIN", Font_16x26 , WHITE, GREEN);
     	ST7789_WriteString(40, 80, "PA9 - PLAY", Font_11x18, WHITE, GREEN);
     	ST7789_WriteString(40, 120, "PA10 - SPEED", Font_11x18, WHITE, GREEN);
     	ST7789_WriteString(40, 160, "PA11 - CONTROLS", Font_11x18, WHITE, GREEN);
@@ -422,6 +422,7 @@ void movimento(void){
 			}
 
 		else if(BOTAO10 == 0){
+
 			bola1Finy = bola1Iniy + 10;
 			apagarbola();
 			bola4x = bola3x;
@@ -441,11 +442,11 @@ void movimento(void){
 		colisao();
 		apagarcoletavel();
 
-		if (dezena > 9 && unidade > 9) {
+		if (dezena == 9 && unidade == 9) {
 			ST7789_Fill_Color(MAGENTA);
 			ST7789_WriteString(50, 30, "PARABENS!", Font_16x26, WHITE, MAGENTA);
 			ST7789_WriteString(50, 100, "VOCE GANHOU!", Font_11x18, WHITE, MAGENTA);
-			ST7789_WriteString(50, 130, "SCORE: 100", Font_11x18, WHITE, MAGENTA);
+			ST7789_WriteString(50, 130, "SCORE: 99", Font_11x18, WHITE, MAGENTA);
 			 ST7789_WriteString(60, 190, "PA12 - MENU", Font_11x18 , WHITE, MAGENTA);
 
 			while(1){
@@ -465,9 +466,17 @@ void colisao(void){
      if(bola1Inix < 41 || bola1Inix > 200 || bola1Iniy < 81 || bola1Iniy > 227){
 	 ST7789_Fill_Color(RED);
 	 ST7789_WriteString(50, 30, "YOU LOSE!", Font_16x26 , WHITE, RED);
-	 ST7789_WriteString(60, 100, "SCORE:", Font_11x18 , WHITE, RED);
-	 ST7789_WriteChar(125, 100, dezena + '0', Font_11x18 , WHITE, RED);
-	 ST7789_WriteChar(135, 100, unidade + '0', Font_11x18 , WHITE, RED);
+	 ST7789_WriteString(60, 80, "SCORE:", Font_11x18 , WHITE, RED);
+	 ST7789_WriteChar(125, 80, dezena + '0', Font_11x18 , WHITE, RED);
+	 ST7789_WriteChar(135, 80, unidade + '0', Font_11x18 , WHITE, RED);
+
+	 ST7789_DrawFilledCircle(60,150 , 20, WHITE);
+	 ST7789_DrawFilledCircle(85,150, 20, WHITE);
+	 ST7789_DrawFilledCircle(110,150, 20, WHITE);
+	 ST7789_DrawFilledCircle(135,150, 20, GREEN);
+	 ST7789_WriteString(137, 134, "X", Font_11x18 , BLACK, GREEN);
+	 ST7789_WriteString(137, 150, "X", Font_11x18 , BLACK, GREEN);
+
 	 ST7789_WriteString(60, 190, "PA12 - MENU", Font_11x18 , WHITE, RED);
 
 	 while(1){
@@ -508,8 +517,8 @@ void desenharbola4 (void){
 }
 
 void coletavel(void) {
-	ColetavelX = (rand() % 166) + 34;
-	ColetavelY = (rand() % 150) + 80;
+	ColetavelX = (rand() % 160) + 38;
+	ColetavelY = (rand() % 146) + 82;
 
 	ST7789_DrawFilledCircle(ColetavelX,ColetavelY, 5, YELLOW);
 	HAL_Delay(100);
@@ -568,14 +577,14 @@ void VelocidadeLed(void) {
 		LED3_LIGA;
 		LED4_LIGA;
 		LED5_DESLIGA;
-		velo = 40;
+		velo = 30;
 	}
 
 	else if (BOTAO11 == 0) {
 		LED3_LIGA;
 		LED4_LIGA;
 		LED5_LIGA;
-		velo = 30;
+		velo = 10;
 		}
 
 	} while (BOTAO12 == 1);
